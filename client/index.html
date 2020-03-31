@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Side</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        #addedUser { width: 490px; margin: 20px auto; border-radius: 10px; background-color: mediumblue; color:moccasin; padding: 30px 20px; display: none;}
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card mt-3">
+                    <div class="card-header text-center">
+                        <h4>Input Your Information</h4>
+                        <p class="text-success" id="msg"></p>
+                    </div>
+                    <div class="card-body">
+                        <div id="addedUser">
+                            <h4 class="text-center">Added User Data</h4>
+                            <div id="addedUserContent">
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email address</label>
+                            <input type="email" class="form-control" id="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Age</label>
+                            <input type="number" class="form-control" id="age">
+                        </div>
+                        <button type="submit" id="addBtn" class="btn btn-primary">Submit</button>
+                    </div>
+                    <div class="card-footer text-center">
+                        <p>&copy; All copyright reserved | Nazmul Hoque</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const addBtn = document.getElementById("addBtn");
+        addBtn.addEventListener('click', () => {
+            let name = document.getElementById('name').value;
+            let email = document.getElementById('email').value;
+            let age = document.getElementById('age').value;
+            const userData = { name, email, age }
+            let msgText = document.getElementById('msg');
+            if(name === '' && email === '') {
+                msgText.innerText = "Name & Email is Required!";
+            }else{
+                const action = postData(userData);
+                document.getElementById('name').value = '';
+                document.getElementById('email').value = '';
+                document.getElementById('age').value = '';
+                msgText.innerText = "Your Information Submitted";
+                document.getElementById('addedUser').style.display = "block";
+            }
+            
+        });
+
+        function postData(data) {
+            fetch('http://localhost:3000/addUser', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            })
+            .then(res => res.json())
+            .then(data => displayData(data))
+        }
+        function displayData(data) {
+            const parentNode = document.getElementById('addedUserContent');
+            const userContent = `
+                <h6>Name: ${data.name}</h6>
+                <p>Email: ${data.email}</p>
+                <p>Age: ${data.age}</p>
+            `;
+            parentNode.innerHTML = userContent;
+        }
+    </script>
+</body>
+
+</html>

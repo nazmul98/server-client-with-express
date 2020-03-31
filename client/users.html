@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Side</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        .singleUser{border-radius: 20px; padding: 20px 30px; width: 350px; background-color:darkgreen; color: white; margin: 20px auto;}
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card mt-3">
+                    <div class="card-header text-center">
+                        <h4>Users Data</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="" id="users">
+
+                        </div>
+                    </div>
+                    <div class="card-footer text-center">
+                        <p>&copy; All copyright reserved | Nazmul Hoque</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadData (api) {
+            const response = await fetch(api);
+            const data = await response.json();
+            return data;
+        }
+        loadData("http://localhost:3000/users")
+            .then(data => displayData(data))
+
+        function displayData(data) {
+            const parentNode = document.getElementById('users');
+            let users = '';
+            data.forEach(user => {
+                const userInfo = `<div class="singleUser">
+                        <h4>Name: ${user.name}</h4>
+                        <p>Email: ${user.email}</p>
+                        <p>Age: ${user.age}</p>
+                    </div>`;
+                users = users + userInfo;
+                parentNode.innerHTML = users;
+            });
+        }
+    </script>
+</body>
+
+</html>
